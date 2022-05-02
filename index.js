@@ -21,6 +21,7 @@ async function run() {
   try {
     await client.connect();
     const serviceCollection = client.db("geniusCar").collection("service");
+    const orderCollection = client.db("geniusCar").collection("order")
 
     //   load all users
     app.get("/service", async (req, res) => {
@@ -51,7 +52,21 @@ async function run() {
         const result = await serviceCollection.deleteOne(query);
         res.send(result);
       });
+
+      // order collection api
+      app.post('/order', async(req, res) => {
+        const order = req.body;
+        const result = await orderCollection.insertOne(order);
+        res.send(result)
+      })
+
+
     });
   } finally {
   }
 }
+run().catch(console.dir);
+
+app.listen(port, () => {
+  console.log(`Example app listening to port ${port} `);
+});
