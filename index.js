@@ -54,6 +54,17 @@ async function run() {
       });
 
       // order collection api
+
+      app.get('/order', async(req, res) => {
+        const email = req.query.email;
+        console.log(email)
+        const query = {email: email};
+        const cursor = orderCollection.find(query);
+        const orders = await cursor.toArray();
+        res.send(orders);
+
+      })
+
       app.post('/order', async(req, res) => {
         const order = req.body;
         const result = await orderCollection.insertOne(order);
@@ -66,6 +77,10 @@ async function run() {
   }
 }
 run().catch(console.dir);
+
+app.get('/', (req, res) => {
+  res.send("The server is working")
+})
 
 app.listen(port, () => {
   console.log(`Example app listening to port ${port} `);
